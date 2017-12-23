@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://web-harvest.sourceforge.net/schema/1.0/config" scriptlang="groovy">
+
+
+
+<var-def name="outputLink">
+	<s3 bucket="aharhots">
+		<s3-put path="bot_test/data_from_ds_test.csv" acl="PublicRead"
+			content-type="text/csv; charset=utf-8" content-disposition="inline">
+			<list-to-csv>
+				<json expression="$.row">
+					<xml-to-json>
+						<datastore name="ds_test">
+							select * from @this;
+						</datastore>
+					</xml-to-json>
+				</json>
+			</list-to-csv>
+		</s3-put>
+	</s3>
+</var-def>
+
+<!--var-def name="searchEngine">google</var-def>
+<var-def name="${searchEngine}Content"><http url="http://www.${searchEngine}.com"/></var-def>
+<file action="write" path="data/${searchEngine}_content.html">
+    <var name="${searchEngine}Content"/>
+</file-->
+
+<file action="write" path="123.txt">
+    <file action="read" path="1.txt"/>
+    -----------------------------------
+    <file action="read" path="2.txt"/>
+    -----------------------------------
+    <file action="read" path="3.txt"/>
+</file>
+
+
+<file action="write" path="new.xml">
+<html-to-xml outputtype="pretty">
+    <http url="http://www.motors.ebay.com"/>
+</html-to-xml>
+</file>
+
+<script><![CDATA[
+log.error("\n\n********************* S3 FILE LINK " + outputLink.toString());
+ ]]></script>
+    <export include-original-data="true">
+    <single-column name="output_link" value="${outputLink}"></single-column>
+    </export>
+
+</config>
